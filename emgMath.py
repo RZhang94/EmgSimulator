@@ -6,7 +6,7 @@ def getMovingAverage(signal, samples = 5):
     return movingAvgData
 def rectification(signal):
     squaredSignal = np.power(signal, 2)
-    positiveSignal = np.power(squaredSignal , 1/2)
+    positiveSignal = np.power(squaredSignal, 1/2)
     return positiveSignal
 
 def movingAverage(signal, samples = 12):
