@@ -28,7 +28,7 @@ origin = (width / 3, height / 2)  ##define position of the arm
 ## speed and direction
 #speed = input("what speed do we want?")
 #direction = input("What direction do we want(1 or -1)?")
-speed = 0.1
+speed = 0.8
 direction = -1 
 ##direction -1 : rise, counterclockwise
 ##direction 1 : relax, clockwise
