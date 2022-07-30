@@ -6,6 +6,7 @@ import numpy as np
 file_path = '/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator/Ray_Sample_data/Pull_fast_1.npz'
 sample_data = np.load(file_path, allow_pickle=True)
 sample_data = sample_data['arr_0']
+print(sample_data.shape)
 
 # plot the data
 import matplotlib.pyplot as plt
