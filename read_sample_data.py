@@ -12,7 +12,7 @@ sample_data = sample_data['arr_0'].T
 sample_data2 = sample_data2['arr_0'].T
 
 
-sampleN = 25
+sampleN = 12
 sampleDataAvg = emgMath.getMovingAverage(sample_data, samples= sampleN)
 sampleDataAvg2 = emgMath.getMovingAverage(sample_data2, samples= sampleN)
 
@@ -21,7 +21,7 @@ differentialForce2 = sampleDataAvg2[0,:] - sampleDataAvg2[1,:]
 
 
 # plot the data
-fig,ax = plt.subplots(4,2)
+fig,ax = plt.subplots(3,2)
 ax[0,0].set_title('Pull Raw Data')
 ax[0,0].plot(sample_data[0,100:], label = 'bicep')
 ax[0,0].plot(sample_data[1,100:], label = 'tricep')
