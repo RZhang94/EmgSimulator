@@ -25,13 +25,22 @@ hand = ArmPart('hand.png', scale=1.0)  ##todo : find another hand
  
 origin = (width / 3, height / 2)  ##define position of the arm
 
+## speed and direction
+#speed = input("what speed do we want?")
+#direction = input("What direction do we want(1 or -1)?")
+speed = 0.1
+direction = -1 
+##direction -1 : rise, counterclockwise
+##direction 1 : relax, clockwise
+sd = speed*direction
+
 while 1:
  
     display.fill(white)
  
     ua_image, ua_rect = upperarm.rotate(.00) 
-    fa_image, fa_rect = forearm.rotate(-.02) 
-    h_image, h_rect = hand.rotate(-.02)
+    fa_image, fa_rect = forearm.rotate(-.02*sd) 
+    h_image, h_rect = hand.rotate(-.02*sd)
  
     # generate (x,y) positions of each of the joints
     joints_x = np.cumsum([0, 
@@ -44,11 +53,13 @@ while 1:
                           hand.length * np.sin(hand.rotation)]) * -1 + origin[1]
     joints = [(int(x), int(y)) for x,y in zip(joints_x, joints_y)]
  
+ ## ignore for now
     def transform(rect, origin, arm_part):
         rect.center += np.asarray(origin)
         rect.center += np.array([np.cos(arm_part.rotation) * arm_part.offset,
                                 -np.sin(arm_part.rotation) * arm_part.offset])
  
+## ignore for now
     transform(ua_rect, joints[0], upperarm)
     transform(fa_rect, joints[1], forearm)
     transform(h_rect, joints[2], hand)
