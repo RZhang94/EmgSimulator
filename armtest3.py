@@ -1,58 +1,37 @@
+import sys
 import numpy as np
 import pygame
+
 import pygame.locals
  
-class ArmPart:
-    """
-    A class for storing relevant arm segment information.
-    """
-    def __init__(self, pic, scale=1.0):
-        self.base = pygame.image.load(pic)
-        # some handy constants
-        self.length = self.base.get_rect()[2]
-        self.scale = self.length * scale
-        self.offset = self.scale / 2.0
- 
-        self.rotation = 0.0 # in radians
- 
-    def rotate(self, rotation):
-        """
-        Rotates and re-centers the arm segment.
-        """
-        self.rotation += rotation 
-        # rotate our image 
-        image = pygame.transform.rotozoom(self.base, np.degrees(self.rotation), 1)
-        # reset the center
-        rect = image.get_rect()
-        rect.center = (0, 0)
- 
-        return image, rect
-
 from armpart import ArmPart
- 
+
+#black and white
 black = (0, 0, 0)
 white = (255, 255, 255)
- 
+
+# initialize the window 
 pygame.init()
  
 width = 750
 height = 750
 display = pygame.display.set_mode((width, height))
 fpsClock = pygame.time.Clock()
- 
+
+## draw the arm
 upperarm = ArmPart('upperarm.png', scale=.7)
 forearm = ArmPart('forearm.png', scale=.8)
-hand = ArmPart('hand.png', scale=1.0)
+hand = ArmPart('hand.png', scale=1.0)  ##todo : find another hand
  
-origin = (width / 2, height / 2)
- 
+origin = (width / 3, height / 2)  ##define position of the arm
+
 while 1:
  
     display.fill(white)
  
-    ua_image, ua_rect = upperarm.rotate(.03) 
+    ua_image, ua_rect = upperarm.rotate(.00) 
     fa_image, fa_rect = forearm.rotate(-.02) 
-    h_image, h_rect = hand.rotate(.03) 
+    h_image, h_rect = hand.rotate(-.02)
  
     # generate (x,y) positions of each of the joints
     joints_x = np.cumsum([0, 
@@ -73,9 +52,9 @@ while 1:
     transform(ua_rect, joints[0], upperarm)
     transform(fa_rect, joints[1], forearm)
     transform(h_rect, joints[2], hand)
-    # transform the hand a bit more because it's weird
+    #  transform the hand a bit more because it's weird
     h_rect.center += np.array([np.cos(hand.rotation), 
-                              -np.sin(hand.rotation)]) * -10
+                             -np.sin(hand.rotation)]) * -10
  
     display.blit(ua_image, ua_rect)
     display.blit(fa_image, fa_rect)
