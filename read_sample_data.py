@@ -7,6 +7,7 @@ file_path = '/Users/a601081/Documents/GitHub/EmgSimulator/Ray_Sample_data/Pull_f
 file_path2 = '/Users/a601081/Documents/GitHub/EmgSimulator/Ray_Sample_data/Push_fast_1.npz'
 
 sample_data = np.load(file_path, allow_pickle=True)
+<<<<<<< HEAD
 sample_data2 = np.load(file_path2, allow_pickle=True)
 
 sample_data = sample_data['arr_0'].T
@@ -18,6 +19,10 @@ rect_data2 = emgMath.rectification(sample_data2)
 sampleNumber = 35
 avg_data = emgMath.movingAverage(rect_data, samples=sampleNumber)
 avg_data2 = emgMath.movingAverage(rect_data2, samples=sampleNumber)
+=======
+sample_data = sample_data['arr_0']
+print(sample_data.shape)
+>>>>>>> c8e950e42160ba2d8dc01112eb9562766b5618fa
 
 # plot the data
 import matplotlib.pyplot as plt

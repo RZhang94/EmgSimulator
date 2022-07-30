@@ -1,17 +1,12 @@
+import numpy as np
+
 import emgMath
-import matplotlib.pyplot as plt
+import plotUtils
 
-fig, ax = plt.subplots(2,1)
 vector, key = emgMath.generateRandomVector(100)
-ax[0].plot(key, vector[0,:])
-
 rectifiedSignal = emgMath.rectification(vector)
-ax[1].plot(key, rectifiedSignal[0,:])
-
 movingAverage = emgMath.movingAverage(rectifiedSignal, samples = 5)
 movingAverage2 = emgMath.movingAverage(rectifiedSignal, samples = 3)
-ax[1].plot(key, movingAverage[0,:])
-ax[1].plot(key, movingAverage2[0,:])
-plt.show()
+plotUtils.PlotGraph(((rectifiedSignal, key, 'rectified signal')))
 
 print('processarinod?')
