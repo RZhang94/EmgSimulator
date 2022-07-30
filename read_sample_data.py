@@ -2,8 +2,8 @@ import numpy as np
 import emgMath
 import matplotlib.pyplot as plt
 
-file_path = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Pull_fast_1.npz'
-file_path2 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Push_fast_1.npz'
+file_path = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Pull_slow_1.npz'
+file_path2 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Push_slow_1.npz'
 
 sample_data = np.load(file_path, allow_pickle=True)
 sample_data2 = np.load(file_path2, allow_pickle=True)
@@ -14,7 +14,10 @@ sample_data2 = sample_data2['arr_0'].T
 
 sampleN = 12
 sampleDataAvg = emgMath.getMovingAverage(sample_data, samples= sampleN)
+#Tricep offset
+sampleDataAvg[1,:] -= 0.3
 sampleDataAvg2 = emgMath.getMovingAverage(sample_data2, samples= sampleN)
+sampleDataAvg2[1,:] -= 0.3
 
 differentialForce1 = sampleDataAvg[0,:] - sampleDataAvg[1,:]
 differentialForce2 = sampleDataAvg2[0,:] - sampleDataAvg2[1,:]
