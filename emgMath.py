@@ -8,6 +8,8 @@ def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCo
 
     avgSignal = trimmedArrays[1]
     diffForce = trimmedArrays[2]
+
+
     if returnCompression:
         return [originalSignal, avgSignal, diffForce, title]
     else:
@@ -80,7 +82,7 @@ def integrateCurveFullT(curve, initialCondition = None):
 
     return integral
 
-def integrateAccelTimeline(inputForce, initialVelocity = 0, initialPosition = 0, gravity = 0):
+def integrateAccelTimeline(inputForce, initialVelocity = 0, initialPosition = 0, gravity = 0, positionLimit = 0):
     #Create arrays
     dataShape = len(inputForce)+1
     accel = np.zeros(shape = dataShape)
@@ -90,20 +92,20 @@ def integrateAccelTimeline(inputForce, initialVelocity = 0, initialPosition = 0,
     accel[0:1] = inputForce[0] + gravity
     position[0:1] = initialPosition
     velocity[0:1] = initialVelocity
-    if accel[0] < 0 and position[0] <=-5:
+    if accel[0] < 0 and position[0] <= positionLimit:
         accel[0:1] = 0
         velocity[0:1] = 0
+        position[0:1] = positionLimit
 
     ##Advance Time
     for i in range(2,dataShape):
         #Calculate initial force
         accel[i] = inputForce[i-1] + gravity
-
-        if accel[i] < 0 and position[i-1] <= -5:
-            accel[i] = 0
-            velocity[i] = 0
-
         velocity[i] = velocity[i-1]+accel[i-1]
         position[i] = position[i-1]+velocity[i-1]
 
+        if accel[i] < 0 and position[i-1] <= positionLimit:
+            accel[i] = 0
+            velocity[i] = 0
+            position[i] = positionLimit
     return accel[2:], velocity[2:], position[2:]

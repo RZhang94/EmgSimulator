@@ -2,12 +2,12 @@ import numpy as np
 import emgMath
 import plotUtils
 
-sampleN = int(125/5)
+sampleN = 60
 ch2Offset = 0
 trimN = 100
 
-filePath1 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Rest_1.npz'
-filePath2 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Rest_2.npz'
+filePath1 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Pull_fast_1.npz'
+filePath2 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Push_fast_1.npz'
 
 data1 = np.load(filePath1, allow_pickle=True)
 data2 = np.load(filePath2, allow_pickle=True)
