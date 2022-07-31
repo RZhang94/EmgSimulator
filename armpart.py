@@ -26,3 +26,16 @@ class ArmPart:
         rect.center = (0, 0)
 
         return image, rect
+
+    def set_position(self, position):
+        """
+        Set the position direction
+        """
+        self.rotation = position
+        # rotate our image 
+        image = pygame.transform.rotozoom(self.base, np.degrees(self.rotation), 1)
+        # reset the center
+        rect = image.get_rect()
+        rect.center = (0, 0)
+
+        return image, rect
