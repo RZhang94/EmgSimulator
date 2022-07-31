@@ -62,3 +62,5 @@ ax[2, 1].plot(differentialForce2[ 100:])
 # ax[3,1].set_title('Push Speed')
 # ax[3, 1].plot(speed2[ 100:])
 plt.show()
+
+print('hi')
