@@ -2,8 +2,9 @@ import numpy as np
 import emgMath
 import matplotlib.pyplot as plt
 
-file_path = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\JOSH_Sample_data\Josh_Pull_slow_0.npz'
-file_path2 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\JOSH_Sample_data\Josh_Pull_slow_1.npz'
+name = 'Jingxuan'
+file_path = '/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator/{}_Sample_data/{}_Rest_normal_0.npz'.format(name, name)
+file_path2 = '/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator/{}_Sample_data/{}_Rest_normal_1.npz'.format(name, name)
 
 sample_data = np.load(file_path, allow_pickle=True)
 sample_data2 = np.load(file_path2, allow_pickle=True)

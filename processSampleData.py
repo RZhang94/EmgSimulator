@@ -1,11 +1,12 @@
 import emgProcess
 
 sampleN = 15
-ch2Offset = 0
+ch2Offset = -1
 trimN = 100
+gainCh1 = 1.25
+gainCh2 = 1
 
-name = 'Jingxuan'
-filePath1 = '/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator/{}_Sample_data/{}_Rest_normal_0.npz'.format(name, name)
-filePath2 = '/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator/{}_Sample_data/{}_Rest_normal_1.npz'.format(name, name)
+filePath1 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\JOSH_Sample_data\Josh_Pull_slow_0.npz'
+filePath2 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\JOSH_Sample_data\Josh_Pull_slow_1.npz'
 
-emgProcess.ProcessData(filePath1, filePath2, sampleN=sampleN, ch2Offset=ch2Offset,trimN=trimN)
+emgProcess.ProcessData(filePath1, filePath2, sampleN=sampleN, ch2Offset=ch2Offset,trimN=trimN, gainCh1= gainCh1, gainCh2=gainCh2)
