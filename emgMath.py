@@ -32,7 +32,9 @@ def convertDataToForce(signal, samples = 12, ch2Offset = -0.3, gainCh1 = 1, gain
         signal = signal.T
     avgData = getMovingAverage(signal, samples= samples)
     avgData[1,:] += ch2Offset
-    diffForce = avgData[0,:]*gainCh1 - avgData[1,:]*gainCh2
+    avgData[0,:] *= gainCh1
+    avgData[1,:] *= gainCh2
+    diffForce = avgData[0,:] - avgData[1,:]
     return [signal, avgData, diffForce]
 def getMovingAverage(signal, samples = 12):
     rectifiedData = rectification(signal)
@@ -51,8 +53,8 @@ def movingAverage(signal, samples = 12):
     movingAverage = np.zeros(shape=signalShape)
     for i in range(signalShape[1]):
         for j in range(signalShape[0]):
-            movingAverage[j,i] = (np.sum(newVector[j, i:i+samples])/samples)
-            # movingAverage[j,i] = np.sqrt(np.sum(newVector[j, i:i+samples])/samples)
+            #movingAverage[j,i] = (np.sum(newVector[j, i:i+samples])/samples)
+            movingAverage[j,i] = np.sqrt(np.sum(newVector[j, i:i+samples])/samples)
 
     return movingAverage
 
@@ -61,5 +63,46 @@ def generateRandomVector(range, magnitude = 20):
     key = np.arange(100)
     return vector, key
 
-# def generateGaussianCurve(length = 100, magnitude, spread):
-#     return vector
+def generateGaussianCurve(length = 100, magnitude = 5, variance = 20):
+    halfsize = length/2
+    vector = np.arange(-halfsize, halfsize)
+    vector2 = np.exp(-1/2*(vector/variance)**2)*magnitude
+    return vector2
+
+def integrateCurveFullT(curve, initialCondition = None):
+    dataShape = curve.shape
+    integral = np.zeros(shape=(dataShape))
+    if len(dataShape)>1:
+        return 1
+    else:
+        if initialCondition == None:
+            initialCondition = 0
+        integral[0] = initialCondition
+        for i in range(1,len(curve[:])):
+            integral[i] += integral[i-1] + curve[i-1]
+
+    return integral
+
+def integrateAccelTimeline(inputForce, initialVelocity = 0, initialPosition = 0, gravity = 0):
+    #Create arrays
+    dataShape = len(inputForce) + 2
+    accel = np.zeros(shape = dataShape)
+    velocity = np.zeros(shape=dataShape)
+    position = np.zeros(shape=dataShape)
+    ##Set initial conditions
+    accel[2] = inputForce[0] + gravity
+    velocity[2] = initialVelocity
+    position[2] = initialPosition
+    ##Advance Time
+    for i in range(3,dataShape):
+        #Calculate initial force
+        accel[i] = inputForce[i-2] + gravity
+        if accel[i] < 0 and position[i] <= 0:
+            accel[i] = 0
+        velocity[i] = velocity[i-1]+accel[i-1]
+        position[i] = position[i-1]+velocity[i-1]
+        #Move forward in time
+        print('hi')
+
+
+    return accel[2:], velocity[2:], position[2:]
