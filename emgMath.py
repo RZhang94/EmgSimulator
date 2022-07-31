@@ -108,4 +108,7 @@ def integrateAccelTimeline(inputForce, initialVelocity = 0, initialPosition = 0,
             accel[i] = 0
             velocity[i] = 0
             position[i] = positionLimit
+        
+        if position[i] < positionLimit:
+            position[i] = positionLimit
     return accel[2:], velocity[2:], position[2:]

@@ -15,8 +15,9 @@ from armpart import ArmPart
 from simpleDynamics import *
 
 
-def positionRegur
-
+def positionRegularization(Positions, maxPosition):
+    regPositions = maxPosition * (Positions - Positions.min())/(Positions.max() - Positions.min())
+    return regPositions
 
 #black and white
 black = (0, 0, 0)
@@ -36,6 +37,7 @@ forearm_initial_position = 0
 hand_initial_position= forearm_initial_position
 
 #mamximum position is 1.5
+maxPosition = 1.5
 
 ## draw the arm
 upperarm = ArmPart('upperarm.png', scale=.7, initial_rotation=upper_initial_poistion)
@@ -53,7 +55,8 @@ sd = speed*direction
 
 # need a module to downsample the data
 
-# a function to regulate the position according to the maximum angle
+# position regulization
+position = positionRegularization(position, maxPosition)
 
 # for i in range(len(differentialForce1)):
 for i in range(len(position)):
