@@ -2,8 +2,8 @@ import numpy as np
 import emgMath
 import matplotlib.pyplot as plt
 
-file_path = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Pull_slow_1.npz'
-file_path2 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\Ray_Sample_data\Push_slow_1.npz'
+file_path = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\JOSH_Sample_data\Josh_Pull_slow_0.npz'
+file_path2 = r'C:\Users\joyce\OneDrive\Documents\GitHub\EmgSimulator\JOSH_Sample_data\Josh_Pull_slow_1.npz'
 
 sample_data = np.load(file_path, allow_pickle=True)
 sample_data2 = np.load(file_path2, allow_pickle=True)
@@ -11,8 +11,12 @@ sample_data2 = np.load(file_path2, allow_pickle=True)
 sample_data = sample_data['arr_0'].T
 sample_data2 = sample_data2['arr_0'].T
 
-
 sampleN = 12
+ch2Offset = -0.3
+trimN = 100
+
+
+
 sampleDataAvg = emgMath.getMovingAverage(sample_data, samples= sampleN)
 #Tricep offset
 sampleDataAvg[1,:] -= 0.3
