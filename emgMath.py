@@ -1,9 +1,14 @@
 import numpy as np
 
-def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCompression = 1, title = 'Blank'):
-    listOfArrays = convertDataToForce(signal = signal, samples = samples, ch2Offset= ch2Offset)
+
+
+
+def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCompression = 1,
+                   title = 'Blank', gainCh1 = 1, gainCh2 = 1):
+    listOfArrays = convertDataToForce(signal = signal, samples = samples, ch2Offset= ch2Offset, gainCh1= gainCh1, gainCh2=gainCh2)
     trimmedArrays = trimListOfArraysColByFirstN(listOfArrays, trimN = trimN)
     originalSignal = trimmedArrays[0]
+
     avgSignal = trimmedArrays[1]
     diffForce = trimmedArrays[2]
     if returnCompression:
@@ -21,13 +26,13 @@ def trimListOfArraysColByFirstN(listOfArrays, trimN= 100):
             trimmedArrays.append(data[trimN:])
     return trimmedArrays
 
-def convertDataToForce(signal, samples = 12, ch2Offset = -0.3):
+def convertDataToForce(signal, samples = 12, ch2Offset = -0.3, gainCh1 = 1, gainCh2 = 1):
     #Check data format
     if signal.shape[0]> signal.shape[1]:
         signal = signal.T
     avgData = getMovingAverage(signal, samples= samples)
     avgData[1,:] += ch2Offset
-    diffForce = avgData[0,:] - avgData[1,:]
+    diffForce = avgData[0,:]*gainCh1 - avgData[1,:]*gainCh2
     return [signal, avgData, diffForce]
 def getMovingAverage(signal, samples = 12):
     rectifiedData = rectification(signal)
@@ -55,3 +60,6 @@ def generateRandomVector(range, magnitude = 20):
     vector = magnitude*(np.random.rand(1,range)-0.5)
     key = np.arange(100)
     return vector, key
+
+# def generateGaussianCurve(length = 100, magnitude, spread):
+#     return vector
