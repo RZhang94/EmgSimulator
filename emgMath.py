@@ -1,8 +1,5 @@
 import numpy as np
 
-
-
-
 def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCompression = 1,
                    title = 'Blank', gainCh1 = 1, gainCh2 = 1):
     listOfArrays = convertDataToForce(signal = signal, samples = samples, ch2Offset= ch2Offset, gainCh1= gainCh1, gainCh2=gainCh2)
