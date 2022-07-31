@@ -5,14 +5,14 @@ class ArmPart:
     """
     A class for storing relevant arm segment information.
     """
-    def __init__(self, pic, scale=1.0):
+    def __init__(self, pic, scale=1.0, initial_rotation = 0):
         self.base = pygame.image.load(pic)
         # some handy constants
         self.length = self.base.get_rect()[2]
         self.scale = self.length * scale
         self.offset = self.scale / 2.0
 
-        self.rotation = 0.0 # in radians
+        self.rotation = initial_rotation # in radians
 
     def rotate(self, rotation):
         """

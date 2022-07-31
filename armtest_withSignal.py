@@ -1,10 +1,13 @@
 import sys
 import numpy as np
 import pygame
+import time
 
 import pygame.locals
  
 from armpart import ArmPart
+
+from read_sample_data_noPlot import * 
 
 #black and white
 black = (0, 0, 0)
@@ -34,8 +37,22 @@ direction = -1
 ##direction 1 : relax, clockwise
 sd = speed*direction
 
-while 1:
- 
+# need a module to downsample the data
+
+for i in range(len(differentialForce1)):
+    if differentialForce1[i] - 0.5 > 0:
+        direction = - 1
+    else:
+        direction = 1
+
+
+    # need the module to set the time delay and compare with the execution time per loop
+    start_time = time.time()
+    speed = differentialForce1[i] * 0.5
+    sd = speed * direction
+    # sd = 0
+    
+
     display.fill(white)
  
     ua_image, ua_rect = upperarm.rotate(.00) 
@@ -79,3 +96,7 @@ while 1:
  
     pygame.display.update()
     fpsClock.tick(30)
+
+    end_time = time.time()
+    interval_time = end_time - start_time
+    # print('time per loop is:  ', interval_time)
