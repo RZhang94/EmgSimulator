@@ -1,13 +1,24 @@
 import sys
+sys.path.append('/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator')
+
+import sys
 import numpy as np
 import pygame
 import time
 
 import pygame.locals
  
+ 
 from armpart import ArmPart
 
-from read_sample_data_noPlot import * 
+# from read_sample_data_noPlot import * 
+from simpleDynamics import *
+
+
+def positionRegularization(Positions, maxPosition, minPosition):
+    regPositions = (maxPosition-minPosition) * (Positions - Positions.min())/(Positions.max() - Positions.min()) + minPosition
+    return regPositions
+    
 
 #black and white
 black = (0, 0, 0)
@@ -21,16 +32,23 @@ height = 750
 display = pygame.display.set_mode((width, height))
 fpsClock = pygame.time.Clock()
 
+# kinetic initialization
+upper_initial_poistion = -.2
+forearm_initial_position = -1.5
+hand_initial_position= forearm_initial_position
+
+#mamximum position is 1.5
+maxPosition = -.2
+minPosition = -1.5
+
 ## draw the arm
-upperarm = ArmPart('upperarm.png', scale=.7, initial_rotation=-0.2)
-forearm = ArmPart('forearm.png', scale=.8, initial_rotation=-1.5)
-hand = ArmPart('hand.png', scale=1.0, initial_rotation=-1.5)  ##todo : find another hand
+upperarm = ArmPart('upperarm.png', scale=.7, initial_rotation=upper_initial_poistion)
+forearm = ArmPart('forearm.png', scale=.8, initial_rotation=forearm_initial_position)
+hand = ArmPart('hand.png', scale=1.0, initial_rotation=hand_initial_position)  ##todo : find another hand
  
 origin = (width / 3, height / 2)  ##define position of the arm
 
-## speed and direction
-#speed = input("what speed do we want?")
-#direction = input("What direction do we want(1 or -1)?")
+
 speed = 0
 direction = -1
 ##direction -1 : rise, counterclockwise
@@ -39,25 +57,26 @@ sd = speed*direction
 
 # need a module to downsample the data
 
-for i in range(len(differentialForce1)):
-    # if differentialForce1[i] - 0.5 > 0:
-    #     direction = - 1
-    # else:
-    #     direction = 1
+# position regulization
+position = positionRegularization(position, maxPosition, minPosition)
 
+# for i in range(len(differentialForce1)):
+for i in range(len(position)):
 
-    # need the module to set the time delay and compare with the execution time per loop
-    start_time = time.time()
-    # speed = differentialForce1[i] * 0.5
-    # sd = speed * direction
-    # sd = 0
+    currentPosition = position[i]
     
 
     display.fill(white)
- 
-    ua_image, ua_rect = upperarm.rotate(.00) 
-    fa_image, fa_rect = forearm.rotate(-.02*sd) 
-    h_image, h_rect = hand.rotate(-.02*sd)
+    
+    # if apply velocity
+    # ua_image, ua_rect = upperarm.rotate(.00) 
+    # fa_image, fa_rect = forearm.rotate(-.02*sd) 
+    # h_image, h_rect = hand.rotate(-.02*sd)
+
+    # if apply position
+    ua_image, ua_rect = upperarm.set_position(upper_initial_poistion) 
+    fa_image, fa_rect = forearm.set_position(currentPosition) 
+    h_image, h_rect = hand.set_position(currentPosition)
  
     # generate (x,y) positions of each of the joints
     joints_x = np.cumsum([0, 
@@ -97,6 +116,4 @@ for i in range(len(differentialForce1)):
     pygame.display.update()
     fpsClock.tick(30)
 
-    end_time = time.time()
-    interval_time = end_time - start_time
     # print('time per loop is:  ', interval_time)

@@ -15,8 +15,8 @@ from armpart import ArmPart
 from simpleDynamics import *
 
 
-def positionRegularization(Positions, maxPosition):
-    regPositions = maxPosition * (Positions - Positions.min())/(Positions.max() - Positions.min())
+def positionRegularization(Positions, maxPosition, minPosition):
+    regPositions = maxPosition * (Positions - Positions.min())/(Positions.max() - Positions.min()) + 1
     return regPositions
 
 #black and white
