@@ -85,24 +85,28 @@ def integrateCurveFullT(curve, initialCondition = None):
 
 def integrateAccelTimeline(inputForce, initialVelocity = 0, initialPosition = 0, gravity = 0):
     #Create arrays
-    dataShape = len(inputForce) + 2
+    dataShape = len(inputForce)+1
     accel = np.zeros(shape = dataShape)
     velocity = np.zeros(shape=dataShape)
     position = np.zeros(shape=dataShape)
     ##Set initial conditions
-    accel[2] = inputForce[0] + gravity
-    velocity[2] = initialVelocity
-    position[2] = initialPosition
+    accel[0:1] = inputForce[0] + gravity
+    position[0:1] = initialPosition
+    velocity[0:1] = initialVelocity
+    if accel[0] < 0 and position[0] <=-5:
+        accel[0:1] = 0
+        velocity[0:1] = 0
+
     ##Advance Time
-    for i in range(3,dataShape):
+    for i in range(2,dataShape):
         #Calculate initial force
-        accel[i] = inputForce[i-2] + gravity
-        if accel[i] < 0 and position[i] <= 0:
+        accel[i] = inputForce[i-1] + gravity
+
+        if accel[i] < 0 and position[i-1] <= -5:
             accel[i] = 0
+            velocity[i] = 0
+
         velocity[i] = velocity[i-1]+accel[i-1]
         position[i] = position[i-1]+velocity[i-1]
-        #Move forward in time
-        print('hi')
-
 
     return accel[2:], velocity[2:], position[2:]
