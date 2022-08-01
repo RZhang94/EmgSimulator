@@ -1,7 +1,7 @@
 import numpy as np
 
 def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCompression = 1,
-                   title = 'Blank', gainCh1 = 1, gainCh2 = 1):
+                   title = 'Blank', gainCh1 = 1, gainCh2 = 1, type = 1):
     listOfArrays = convertDataToForce(signal = signal, samples = samples, ch2Offset= ch2Offset, gainCh1= gainCh1, gainCh2=gainCh2)
     trimmedArrays = trimListOfArraysColByFirstN(listOfArrays, trimN = trimN)
     originalSignal = trimmedArrays[0]
@@ -9,11 +9,33 @@ def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCo
     avgSignal = trimmedArrays[1]
     diffForce = trimmedArrays[2]
 
+    ##Filter force
+    searchN = 6
+    filtForce = np.zeros(shape = len(diffForce))
+    filtForceExtended = np.zeros(shape = len(diffForce)+ searchN)
+    filtForceExtended[:-searchN] = diffForce
+    for i in range(searchN,len(diffForce)):
+        filtForce[i] = max(filtForceExtended[i-searchN:i+searchN])
+    filtForce = filtForce * type
+    value = np.sign(filtForce)
+    magnitude = np.power(np.power(filtForce,2), 1/8)
+    filtForce = np.multiply(value, magnitude)
+    # filtForce = low_pass_filter(diffForce)
+
+
+    #Kinematic model, find 0
+    gravityGuess = -0.7
+    accel, velocity, position = integrateAccelTimeline(filtForce, gravity= gravityGuess)
+    print(position[-1])
+    # while position[-1]>max(position)*0.01:
+    #     gravityGuess -= 0.005
+    #     accel, velocity, position = integrateAccelTimeline(filtForce, gravity=gravityGuess)
+    #     print(position[-1])
 
     if returnCompression:
-        return [originalSignal, avgSignal, diffForce, title]
+        return [originalSignal, avgSignal, diffForce, filtForce, accel, velocity, position, title]
     else:
-        return originalSignal, avgSignal, diffForce
+        return originalSignal, avgSignal, diffForce, filtForce, accel, velocity, position, title
 
 def trimListOfArraysColByFirstN(listOfArrays, trimN= 100):
     trimmedArrays = []
@@ -42,7 +64,18 @@ def getMovingAverage(signal, samples = 12):
 def rectification(signal):
     squaredSignal = np.power(signal, 2)
     positiveSignal = np.power(squaredSignal, 1/2)
-    return positiveSignal
+    positiveSignal[positiveSignal<5] = 0
+    lowPassSignal1 = low_pass_filter(positiveSignal[0,:], bandlimit= 32)
+    lowPassSignal2 = low_pass_filter(positiveSignal[1,:], bandlimit= 32)
+    signal2 = np.vstack((lowPassSignal1, lowPassSignal2))
+    signal2[signal2<5] = 0
+
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(2,1)
+    ax[0].plot(positiveSignal[0,:])
+    ax[1].plot(signal2[0,:])
+    plt.show()
+    return signal2
 
 def movingAverage(signal, samples = 12):
     signalShape = signal.shape
@@ -111,4 +144,17 @@ def integrateAccelTimeline(inputForce, initialVelocity = 0, initialPosition = 0,
         
         if position[i] < positionLimit:
             position[i] = positionLimit
+        if position[i] < positionLimit:
+            position[i] = positionLimit
+            velocity[i] = 0
     return accel[2:], velocity[2:], position[2:]
+
+def low_pass_filter(adata: np.ndarray, bandlimit: int = 8, sampling_rate: int = 125) -> np.ndarray:
+    # translate bandlimit from Hz to dataindex according to sampling rate and data size
+    bandlimit_index = int(bandlimit * adata.size / sampling_rate)
+    fsig = np.fft.fft(adata)
+    for i in range(bandlimit_index + 1, len(fsig) - bandlimit_index):
+        fsig[i] = 0
+    adata_filtered = np.fft.ifft(fsig)
+    return np.real(adata_filtered)
+
