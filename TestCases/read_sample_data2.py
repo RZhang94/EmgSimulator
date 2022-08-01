@@ -5,7 +5,7 @@ import numpy as np
 import emgMath
 import plotUtils
 
-sampleN = 60
+sampleN = 10
 ch2Offset = 0
 trimN = 100
 
@@ -25,9 +25,9 @@ data2 = data2['arr_0'].T
 title1= filePath1.split('\\')[-1].split('.')[0]
 title2= filePath2.split('\\')[-1].split('.')[0]
 
-
-
-signal1 = emgMath.processExgData(data1, samples = sampleN, ch2Offset = ch2Offset, trimN = trimN, title = title1)
-signal2 = emgMath.processExgData(data2, samples = sampleN, ch2Offset = ch2Offset, trimN = trimN, title = title2)
+signal1 = emgMath.processExgData(data1, samples = sampleN, ch2Offset = ch2Offset, trimN = trimN, title = title1, type = 1)
+signal2 = emgMath.processExgData(data2, samples = sampleN, ch2Offset = ch2Offset, trimN = trimN, title = title2, type = -1)
 
 plotUtils.PlotTwoExgData(signal1= signal1, signal2 = signal2)
+
+print('hello world')
