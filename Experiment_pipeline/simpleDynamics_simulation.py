@@ -19,5 +19,3 @@ ax[1].set_title('velocity')
 ax[2].plot(position)
 ax[2].set_title('position')
 plt.show()
-
-print('hi')
