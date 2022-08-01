@@ -7,7 +7,8 @@ import pygame
 import time
 import pygame.locals
 from armpart import ArmPart
-from simpleDynamics import *
+# from simpleDynamics import *
+from read_sample_data2 import *
 
 
 def positionRegularization(Positions, maxPosition, minPosition):
@@ -19,7 +20,13 @@ def gravityScale(Positions, maxPosition, minPosition):
     scale = (maxPosition-minPosition)/(Positions.max() - Positions.min())
     return scale
 
+def subsamplePosition(Positions):
+    Positions = Positions[::2]
+    return Positions
+
+
 def armMove(mode, position):
+    start_time = time.time()
         
     #black and white
     black = (0, 0, 0)
@@ -107,8 +114,19 @@ def armMove(mode, position):
                 sys.exit()
     
         pygame.display.update()
-        fpsClock.tick(30)
+        fpsClock.tick(60)
+
+    end_time = time.time()
+    interval = end_time - start_time
+    print('interval time is:   ', interval)
 
 
+position = signal1[6]
+position = subsamplePosition(position)
+mode = 'pull' # 'pull' or 'push'
+armMove(mode, position)
+
+position = signal2[6]
+position = subsamplePosition(position)
 mode = 'push' # 'pull' or 'push'
 armMove(mode, position)
