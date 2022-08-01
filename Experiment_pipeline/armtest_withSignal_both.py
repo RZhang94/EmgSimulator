@@ -56,9 +56,9 @@ def armMove(mode, position):
     minPosition = forearm_initial_position
 
     ## draw the arm
-    upperarm = ArmPart('upperarm.png', scale=.7, initial_rotation=upper_initial_poistion)
-    forearm = ArmPart('forearm.png', scale=.8, initial_rotation=forearm_initial_position)
-    hand = ArmPart('hand.png', scale=1.0, initial_rotation=hand_initial_position)  ##todo : find another hand
+    upperarm = ArmPart('./Experiment_pipeline/upperarm.png', scale=.7, initial_rotation=upper_initial_poistion)
+    forearm = ArmPart('./Experiment_pipeline/forearm.png', scale=.8, initial_rotation=forearm_initial_position)
+    hand = ArmPart('./Experiment_pipeline/hand.png', scale=1.0, initial_rotation=hand_initial_position)  ##todo : find another hand
     
     origin = (width * origin_x, height / 2)  ##define position of the arm
 
