@@ -1,5 +1,38 @@
 import numpy as np
 
+def processExgData2(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCompression = 1,
+                   title = 'Blank', gainCh1 = 1, gainCh2 = 1, type = 1):
+    listOfArrays = convertDataToForce(signal = signal, samples = samples, ch2Offset= ch2Offset, gainCh1= gainCh1, gainCh2=gainCh2)
+    trimmedArrays = trimListOfArraysColByFirstN(listOfArrays, trimN = trimN)
+    originalSignal = trimmedArrays[0]
+
+    avgSignal = trimmedArrays[1]
+    diffForce = trimmedArrays[2]
+
+    ##Filter force
+    signalShape = avgSignal.shape
+    filtForce = np.zeros(shape = signalShape[1])
+    for i in range(signalShape[1]):
+        filtForce[i] = np.max(avgSignal[:,i])
+    thresholdValue = 0.25
+    filtForce[filtForce< max(filtForce)*thresholdValue] = 0
+    filtForce = np.power(filtForce, 1/3)
+
+
+    #Kinematic model, find 0
+    gravityGuess = -1.5
+    accel, velocity, position = integrateAccelTimeline(filtForce, gravity= gravityGuess)
+    print(position[-1])
+    # while position[-1]>max(position)*0.01:
+    #     gravityGuess -= 0.05
+    #     accel, velocity, position = integrateAccelTimeline(filtForce, gravity=gravityGuess)
+    #     print(position[-1])
+
+    if returnCompression:
+        return [originalSignal, avgSignal, diffForce, filtForce, accel, velocity, position, title]
+    else:
+        return originalSignal, avgSignal, diffForce, filtForce, accel, velocity, position, title
+
 def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCompression = 1,
                    title = 'Blank', gainCh1 = 1, gainCh2 = 1, type = 1):
     listOfArrays = convertDataToForce(signal = signal, samples = samples, ch2Offset= ch2Offset, gainCh1= gainCh1, gainCh2=gainCh2)
@@ -37,6 +70,7 @@ def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCo
     else:
         return originalSignal, avgSignal, diffForce, filtForce, accel, velocity, position, title
 
+
 def trimListOfArraysColByFirstN(listOfArrays, trimN= 100):
     trimmedArrays = []
     for i in range(len(listOfArrays)):
@@ -64,17 +98,16 @@ def getMovingAverage(signal, samples = 12):
 def rectification(signal):
     squaredSignal = np.power(signal, 2)
     positiveSignal = np.power(squaredSignal, 1/2)
-    positiveSignal[positiveSignal<5] = 0
+    positiveSignal[positiveSignal<4] = 0
     lowPassSignal1 = low_pass_filter(positiveSignal[0,:], bandlimit= 32)
     lowPassSignal2 = low_pass_filter(positiveSignal[1,:], bandlimit= 32)
     signal2 = np.vstack((lowPassSignal1, lowPassSignal2))
-    signal2[signal2<5] = 0
-
-    import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(2,1)
-    ax[0].plot(positiveSignal[0,:])
-    ax[1].plot(signal2[0,:])
-    plt.show()
+    signal2[signal2<4] = 0
+    # import matplotlib.pyplot as plt
+    # fig, ax = plt.subplots(2,1)
+    # ax[0].plot(positiveSignal[0,:])
+    # ax[1].plot(signal2[0,:])
+    # plt.show()
     return signal2
 
 def movingAverage(signal, samples = 12):
