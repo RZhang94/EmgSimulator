@@ -10,6 +10,10 @@ from armpart import ArmPart
 from simpleDynamics import *
 
 
+"""
+Test the program to run on Pull and Push data
+"""
+
 def positionRegularization(Positions, maxPosition, minPosition):
     regPositions = (maxPosition-minPosition) * (Positions - Positions.min())/(Positions.max() - Positions.min()) + minPosition
     return regPositions
