@@ -1,4 +1,3 @@
-# Importing Libraries
 from multiprocessing.connection import wait
 from random import sample
 from tracemalloc import start
@@ -9,15 +8,29 @@ import matplotlib.animation as animation
 from matplotlib import style
 import numpy as np
 import os
-import emgProcess
+import emgProcess_data
 
+"""
+Program for sampling data from EXG
+
+Steps:
+1. Place the 2 channel EXG to the arm
+2. Build Arduino hardware to acquire data
+3. Connect the computer with Arduino
+4. Run this script
+5. Follow the instructions in the terminal and collect data
+6. Data would be stored automatically
+"""
+
+# define the experiment paramters
 buffer_time = 6
 sample_frequency = 125
 num_Channels = 2
-tao = 1/sample_frequency
+tao = 1/sample_frequency  
 
-# Experiment_name_list = ['Pull', 'Push', 'Rest']
-Experiment_name_list = ['Rest']
+# experiment catogary
+Experiment_name_list = ['Pull', 'Push', 'Rest']
+# Experiment_name_list = ['Rest']
 Level_list = ['slow', 'fast']
 # Level_list = ['fast']
 Experiment_number_list = ['0', '1']
@@ -103,7 +116,7 @@ def conduct_experiment(name, experiment_full_name, sample_frequency, buffer_time
     gainCh1 = 1
     gainCh2 = 1
     title = experiment_full_name
-    emgProcess.ProcessData(buffer_array, title, sampleN=sampleN, ch2Offset=ch2Offset,trimN=trimN, gainCh1= gainCh1, gainCh2=gainCh2)
+    emgProcess_data.ProcessData(buffer_array, title, sampleN=sampleN, ch2Offset=ch2Offset,trimN=trimN, gainCh1= gainCh1, gainCh2=gainCh2)
     print('done')
 
 name = input('What is your name?\n')
@@ -120,8 +133,6 @@ for experiment_name in Experiment_name_list:
             print('\n'*10)
             arduino = serial.Serial(port='/dev/cu.usbmodem11101', baudrate=115200, timeout=tao)
             conduct_experiment(name, experiment_full_name,sample_frequency, buffer_time, num_Channels)
-            # arduino.flushInput()
-            # arduino.flushOutput()
             arduino.close()
         
 
