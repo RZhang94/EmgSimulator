@@ -29,7 +29,9 @@ signal1[6]*=pullScale
 signal2[4]*=pushScale
 signal2[5]*=pushScale
 signal2[6]*=pushScale
-plotUtils.PlotTwoExgData(signal1= signal1, signal2 = signal2)
+plotUtils.PlotExgForce(signal= signal1, suptitle= "Bicep Pull")
+plotUtils.PlotExgForce(signal= signal2, suptitle= "Tricep Push")
+
 
 
 print('hello world')

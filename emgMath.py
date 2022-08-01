@@ -20,7 +20,7 @@ def processExgData2(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnC
         filtForce[i] = np.max(avgSignal[:,i])
     thresholdValue = 0.25
     filtForce[filtForce< max(filtForce)*thresholdValue] = 0
-    filtForce = np.power(filtForce, 1/3)
+    filtForce = np.power(filtForce, 3/10)
 
 
     #Kinematic model, find 0
@@ -112,11 +112,6 @@ def rectification(signal):
     lowPassSignal2 = low_pass_filter(positiveSignal[1,:], bandlimit= 32)
     signal2 = np.vstack((lowPassSignal1, lowPassSignal2))
     signal2[signal2<4] = 0
-    # import matplotlib.pyplot as plt
-    # fig, ax = plt.subplots(2,1)
-    # ax[0].plot(positiveSignal[0,:])
-    # ax[1].plot(signal2[0,:])
-    # plt.show()
     return signal2
 
 def movingAverage(signal, samples = 12):
@@ -188,7 +183,6 @@ def integrateAccelTimeline(inputForce, initialVelocity = 0, initialPosition = 0,
             position[i] = positionLimit
         if position[i] < positionLimit:
             position[i] = positionLimit
-            velocity[i] = 0
     return accel[2:], velocity[2:], position[2:]
 
 def low_pass_filter(adata: np.ndarray, bandlimit: int = 8, sampling_rate: int = 125) -> np.ndarray:
