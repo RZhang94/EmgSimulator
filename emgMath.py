@@ -1,5 +1,9 @@
 import numpy as np
 
+"""
+Package for mathematic tools used to process the EMG signal, contrains:
+"""
+
 def processExgData2(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCompression = 1,
                    title = 'Blank', gainCh1 = 1, gainCh2 = 1, type = 1):
     listOfArrays = convertDataToForce(signal = signal, samples = samples, ch2Offset= ch2Offset, gainCh1= gainCh1, gainCh2=gainCh2)
@@ -70,7 +74,7 @@ def processExgData(signal, samples = 12, ch2Offset = -0.3, trimN = 100, returnCo
     else:
         return originalSignal, avgSignal, diffForce, filtForce, accel, velocity, position, title
 
-
+# trim the frist trimN data
 def trimListOfArraysColByFirstN(listOfArrays, trimN= 100):
     trimmedArrays = []
     for i in range(len(listOfArrays)):
@@ -81,6 +85,7 @@ def trimListOfArraysColByFirstN(listOfArrays, trimN= 100):
             trimmedArrays.append(data[trimN:])
     return trimmedArrays
 
+# take EXG data as input, output [raw signal, average filtered data, differetial force]
 def convertDataToForce(signal, samples = 12, ch2Offset = -0.3, gainCh1 = 1, gainCh2 = 1):
     #Check data format
     if signal.shape[0]> signal.shape[1]:
@@ -91,10 +96,14 @@ def convertDataToForce(signal, samples = 12, ch2Offset = -0.3, gainCh1 = 1, gain
     avgData[1,:] *= gainCh2
     diffForce = avgData[0,:] - avgData[1,:]
     return [signal, avgData, diffForce]
+
+# moving average
 def getMovingAverage(signal, samples = 12):
     rectifiedData = rectification(signal)
     movingAvgData = movingAverage(rectifiedData, samples = samples)
     return movingAvgData
+
+# low pass and thrsholding
 def rectification(signal):
     squaredSignal = np.power(signal, 2)
     positiveSignal = np.power(squaredSignal, 1/2)

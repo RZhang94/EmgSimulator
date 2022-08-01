@@ -1,5 +1,9 @@
 import matplotlib.pyplot as plt
 
+"""
+Package for plotting the data
+"""
+
 def PlotTwoExgData(signal1, signal2):
     signalSize = max(len(signal1), len(signal2))
     if signalSize == 8:

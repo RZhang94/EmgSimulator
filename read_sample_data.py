@@ -2,7 +2,8 @@ import numpy as np
 import emgMath
 import matplotlib.pyplot as plt
 
-name = 'Jingxuan'
+
+name = 'Jingxuan'  # name can be changed, depends on the subject name
 file_path = '/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator/{}_Sample_data/{}_Rest_normal_0.npz'.format(name, name)
 file_path2 = '/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator/{}_Sample_data/{}_Rest_normal_1.npz'.format(name, name)
 
