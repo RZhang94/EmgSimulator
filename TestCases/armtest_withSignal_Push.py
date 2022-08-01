@@ -33,20 +33,20 @@ display = pygame.display.set_mode((width, height))
 fpsClock = pygame.time.Clock()
 
 # kinetic initialization
-upper_initial_poistion = -.2
+upper_initial_poistion = -2.8
 forearm_initial_position = -1.5
 hand_initial_position= forearm_initial_position
 
 #mamximum position is 1.5
-maxPosition = -.2
-minPosition = -1.5
+maxPosition = upper_initial_poistion
+minPosition = forearm_initial_position
 
 ## draw the arm
 upperarm = ArmPart('upperarm.png', scale=.7, initial_rotation=upper_initial_poistion)
 forearm = ArmPart('forearm.png', scale=.8, initial_rotation=forearm_initial_position)
 hand = ArmPart('hand.png', scale=1.0, initial_rotation=hand_initial_position)  ##todo : find another hand
  
-origin = (width / 3, height / 2)  ##define position of the arm
+origin = (width / 3 * 2, height / 2)  ##define position of the arm
 
 
 speed = 0
@@ -61,8 +61,9 @@ sd = speed*direction
 position = positionRegularization(position, maxPosition, minPosition)
 
 # for i in range(len(differentialForce1)):
+# i = 0
 for i in range(len(position)):
-
+# while 1:
     currentPosition = position[i]
     
 
