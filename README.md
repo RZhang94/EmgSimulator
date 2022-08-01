@@ -16,22 +16,22 @@ Hardware: Arduino, BioEXG
 ## Implementation
 
 ### Collection Data
-'''
+```
 python ./Data_collection/Sample_Experiment.py
 ```
  and follow the instruction, data will be automatic stored
  
 ### (Option) Analyse Data
 To perform filter, and generate force, velocity, position of the arm.
-'''
+```
 python ./TestCases/read_sample_data2.py
-'''
+```
 
 ### Virtual Arm Movement
 Directly run (after data collection)
-'''
+```
 python ./Experiment_pipeline/armtest_withSignal_both.py
-'''
+```
   the movement of the virtual arm would be displayed
   
 Have fun!!!
