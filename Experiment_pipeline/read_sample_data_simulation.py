@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/Users/zhangzhaoxiang/Documents/GitHub/EmgSimulator')
+
 import numpy as np
 import emgMath
 import plotUtils
