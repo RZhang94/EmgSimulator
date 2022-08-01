@@ -8,20 +8,26 @@ import time
 import pygame.locals
 from armpart import ArmPart
 # from simpleDynamics import *
-from read_sample_data2 import *
+from read_sample_data_simulation import *
 
+"""
+Program to simulate the virtual arm and get the animation.
+Input: processed signals.
+Output: pygame GUI.
+"""
 
-def positionRegularization(Positions, maxPosition, minPosition):
+def positionRegularization(Positions, maxPosition, minPosition):    # normalize the position accordding to maximum angle of the arm
     regPositions = (maxPosition-minPosition) * (Positions - Positions.min())/(Positions.max() - Positions.min()) + minPosition
     scale = (maxPosition-minPosition)/(Positions.max() - Positions.min())
     return regPositions, scale
 
 def gravityScale(Positions, maxPosition, minPosition):
-    scale = (maxPosition-minPosition)/(Positions.max() - Positions.min())
+    scale = (maxPosition-minPosition)/(Positions.max() - Positions.min())   # return to the gravity scale
     return scale
 
+
 def subsamplePosition(Positions):
-    Positions = Positions[::2]
+    Positions = Positions[::2]      # subsample the data to 1/2 the size
     return Positions
 
 

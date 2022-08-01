@@ -4,6 +4,10 @@ import emgMath
 import matplotlib.pyplot as plt
 import numpy as np
 
+"""
+Generate a gaussian wave as the pseudo signal and solve the position according to kinetic model
+"""
+
 gaussian = emgMath.generateGaussianCurve()
 accel, velocity, position = emgMath.integrateAccelTimeline(inputForce = gaussian, gravity= -3.95, positionLimit= 0)
 
